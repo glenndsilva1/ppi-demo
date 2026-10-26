@@ -11,9 +11,14 @@ server-rendered HTML via [Takes](https://github.com/yegor256/takes).
 ## Run
 
     createdb ppi_demo && createdb ppi_demo_test   # once
-    mvn -q compile exec:java                       # http://localhost:8080/
-    PPI_PORT=8081 mvn -q compile exec:java         # if 8080 is busy
+    mvn -q compile exec:java                       # local DB, http://localhost:8080/
+    mvn -q compile exec:java -Dppi.profile=neon    # Neon DB, http://localhost:8081/
     mvn test                                       # uses ppi_demo_test
+
+Each profile is a file in `config/`: `local.properties` (in git) and
+`neon.properties` (not in git, it holds the password; start from
+`neon.properties.example`). `PPI_DB_URL` and `PPI_PORT` in the environment
+override the file; that is how Render is configured.
 
 On first start it loads demo data: two BC agents (Ravi, ₹20,000 float;
 Sunita, ₹500 float) and two wallets (Asha, empty, Minimum KYC; Rahul, with

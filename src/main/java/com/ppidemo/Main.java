@@ -9,9 +9,8 @@ import org.takes.http.FtBasic;
 /**
  * Entry point: migrates the database, fills in demo data, then serves HTTP.
  *
- * <p>Settings come from the environment: {@code PPI_DB_URL} (default
- * {@code jdbc:postgresql://localhost:5432/ppi_demo}) and {@code PPI_PORT}
- * (else {@code PORT}, as cloud hosts set it, else 8080).</p>
+ * <p>Settings come from {@code config/<profile>.properties}, see
+ * {@link Settings}.</p>
  */
 public final class Main {
 
@@ -41,14 +40,9 @@ public final class Main {
      * @throws IOException If fails
      */
     public static void main(final String... argv) throws IOException {
-        new Main(
-            System.getenv().getOrDefault("PPI_DB_URL", "jdbc:postgresql://localhost:5432/ppi_demo"),
-            Integer.parseInt(
-                System.getenv().getOrDefault(
-                    "PPI_PORT", System.getenv().getOrDefault("PORT", "8080")
-                )
-            )
-        ).exec();
+        final Settings settings = new Settings();
+        System.out.printf("Profile %s%n", settings.name());
+        new Main(settings.url(), settings.port()).exec();
     }
 
     /**

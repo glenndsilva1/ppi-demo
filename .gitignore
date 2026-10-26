@@ -1,3 +1,6 @@
 target/
 .idea/
 *.iml
+# Profiles with passwords stay on this machine
+config/*.properties
+!config/local.properties

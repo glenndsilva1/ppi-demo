@@ -1,0 +1,6 @@
+# Neon cloud database. Copy this file to config/neon.properties, put in
+# your real password, and run:
+#   mvn -q compile exec:java -Dppi.profile=neon
+# config/neon.properties is in .gitignore; never commit it.
+db.url=jdbc:postgresql://HOST/DB?user=USER&password=PASSWORD&sslmode=require
+port=8081
