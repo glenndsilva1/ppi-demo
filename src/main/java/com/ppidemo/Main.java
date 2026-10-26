@@ -1,13 +1,17 @@
 package com.ppidemo;
 
 import com.ppidemo.web.TkApp;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.io.IOException;
-import org.postgresql.ds.PGSimpleDataSource;
 import org.takes.http.Exit;
 import org.takes.http.FtBasic;
 
 /**
  * Entry point: migrates the database, fills in demo data, then serves HTTP.
+ *
+ * <p>Connections are pooled and reused: opening one to a cloud database
+ * takes several round trips, and every query would pay for them.</p>
  *
  * <p>Settings come from {@code config/<profile>.properties}, see
  * {@link Settings}.</p>
@@ -50,8 +54,10 @@ public final class Main {
      * @throws IOException If fails
      */
     public void exec() throws IOException {
-        final PGSimpleDataSource src = new PGSimpleDataSource();
-        src.setUrl(this.url);
+        final HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(this.url);
+        config.setMaximumPoolSize(5);
+        final HikariDataSource src = new HikariDataSource(config);
         new PgMigrations(src).apply();
         new Demo(src).fill();
         System.out.println("Database is up to date");

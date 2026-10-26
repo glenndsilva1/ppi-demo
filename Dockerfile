@@ -7,4 +7,4 @@ RUN mvn -q package -DskipTests
 
 FROM eclipse-temurin:17.0.18_8-jre
 COPY --from=build /app/target/ppi-demo.jar /app.jar
-CMD ["java", "-XX:MaxRAMPercentage=75", "-jar", "/app.jar"]
+CMD ["java", "-XX:MaxRAMPercentage=75", "-Djava.net.preferIPv4Stack=true", "-jar", "/app.jar"]
